@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package chetbot;
+package chatbot;
 
 import com.rivescript.RiveScript;
 import org.telegram.telegrambots.api.methods.send.SendMessage;

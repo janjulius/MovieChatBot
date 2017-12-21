@@ -1,4 +1,4 @@
-package chetbot;
+package chatbot;
 
 public class SystemSubroutine {
 }
