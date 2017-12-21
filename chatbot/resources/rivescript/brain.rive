@@ -1,0 +1,51 @@
+// brain.rive
+
++ [*] (hello|hi|hallo|hey|hoi|he|hei|sup|ey|yo|yoo|eyy|boi) [*]
+- Hi there!
+- Hello!
+- What's up? :eyes:
+
++ [*] how are you [*]
+- I'm fine.
+- Splendid!
+- Couldn't be better!
+^ What about you?
+
++ [*] start [*]
+- I'm MovieBot bot! Ask me questions about your favorite movies. Type help for some example questions.
+
++ [*] help [*]
+- You can ask me questions like:\n
+^ Which movies did Liv Tyler act in?\n
+^ How many chickens cross the road?\n
+^ What are common video formats?
+
++ *
+- <star>.. I do not know that, tell me all about it!
+
+
++ which movies did _ _ *
+- <call>jdbc localhost 3306 imdb imdb imdb select title from cast_info, name, title, kind_type where person_id = name.id and title.id = movie_id and kind_id = kind_type.id and name like '<star2>, <star>' and kind = 'movie'</call>
+
++ [*] video formats [*]
+- There it is! 
+^ <call>system resources/R/video-format.R 2&> /dev/null</call>
+^ <call>send photo /tmp/video-format.jpg The graph produced by R</call>
+
+// Substitutions
+! sub i'm     = i am
+! sub i'd     = i would
+! sub i've    = i have
+! sub i'll    = i will
+! sub don't   = do not
+! sub isn't   = is not
+! sub you'd   = you would
+! sub you're  = you are
+! sub you've  = you have
+! sub you'll  = you will
+! sub what's  = what is
+! sub whats   = what is
+! sub what're = what are
+! sub what've = what have
+! sub what'll = what will
+! sub who's   = who is
