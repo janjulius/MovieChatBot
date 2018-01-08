@@ -6,10 +6,15 @@
 package chatbot;
 
 import com.rivescript.RiveScript;
+import geocoder.Geocoder;
+import gmapAPI.GLatLng;
+import org.telegram.telegrambots.api.methods.send.SendLocation;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+
+import java.io.IOException;
 
 /**
  *
@@ -41,8 +46,22 @@ public class Bot extends TelegramLongPollingBot {
             String reply = bot.reply(String.valueOf(chat_id), message_text);
 
             SendMessage message = new SendMessage() // Create a message object object
-                    .setChatId(chat_id)
-                    .setText(reply);
+                   .setChatId(chat_id)
+                   .setText(reply);
+
+            //Geocoder g = new Geocoder();
+            //gmapAPI.GLatLng geoloc = new GLatLng(1, 1);
+//
+            //SendLocation message = null;
+
+            //try {
+            //    geoloc = g.geocode(reply);
+            //    message = new SendLocation().setChatId(chat_id).setLatitude((float)geoloc.getLat()).setLongitude((float)geoloc.getLng());
+//
+            //} catch (IOException e) {
+            //    e.printStackTrace();
+            //}
+
             try {
                 execute(message); // Sending our message object to user
             } catch (TelegramApiException e) {
@@ -61,6 +80,7 @@ public class Bot extends TelegramLongPollingBot {
     public String getBotToken() {
         // Return bot token from BotFather
         return "481581828:AAECIA6oZ9_nRRHe-DGdD9aunOZCjZtZBac";
+        //return "491218459:AAG-vwJjXLUniO3g6QQCiU2xXO3C9Y3Oj5I"; //coolestboybot
     }
 
 }
