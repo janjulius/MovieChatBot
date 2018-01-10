@@ -11,6 +11,15 @@
 + [*] bijdehand [*]
 - lol
 
++ [*] (brudda|brudder|bruddah) [*]
+- yes bruddah
+
++ [*] do (you|yu) (know|kno|knoe) (the|de) (way|wea|wae) [*]
+- i do not kno de wae you need to hav ebola to kno de wae i do not have ebola
+
++ [*] best country in the world? [*]
+- Uganda #1
+
 + [*] (thx|ty|thank you|thanks|thanks you|thank|) [*]
 - ur welcome
 
@@ -43,6 +52,36 @@
 - There it is! 
 ^ <call>system resources/R/video-format.R 2&> /dev/null</call>
 ^ <call>send photo /tmp/video-format.jpg The graph produced by R</call>
+
+// Questions
+
+//A3
++ (which|what) (actor|actress) (has|is) (plays|played) in (movies|films) the longest?
+- TODO <call>jdbc localhost 3306 SELECT name FROM Actor WHERE </call>
+
+//A4
++ (which|what) [*] (film|movie) has (earned|made) the most in a cinema
+- TODO SQL QUERY <star> = country
+
+//A5
++ (which|what) (film|movie) took the longest (time|| ) to record
+- TODO SQL QUERY
+
+//A10
++ (which|what) (film|movie) plays in more than one country
+- TODO SQL QUERY
+
+//A11
++ (what|which) [*](writer|director) played in their own (movie|film)
+- TODO SQL QUERY
+
+//A16
++ In what year between 1990 en now were most movies that contained ('beer'|beer) in the title produced. what was the most common genre?
+- TODO SQL QUERY
+
+//B3
++
+
 
 // Substitutions
 ! sub i'm     = i am

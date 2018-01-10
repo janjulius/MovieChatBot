@@ -15,7 +15,12 @@ public class Settings {
     /**
      * @description Google maps api token
      */
-    public static String GOOGLE_MAPS_API_TOKEN = "AIzaSyCOuM-Lk_LQsY4vuq_wqpHv6P2dIAUU2eI";
+    public static String GOOGLE_MAPS_API_TOKEN = "AIzaSyBezf0DaZTA3VLa3JA5EncYU1s4UR6nVvQ";
+
+    /**
+     * @description Youtube api token
+     */
+    public static String YOUTUBE_API_TOKEN = "AIzaSyBY9caBKNEpjM86H08kK6jQgkVMxsXl3GQ";
 
     /**
      * @description returns extra debug messages if turned on

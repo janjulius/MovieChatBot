@@ -16,6 +16,8 @@ import com.rivescript.RiveScript;
 import org.telegram.telegrambots.api.methods.GetMe;
 import org.telegram.telegrambots.api.methods.send.SendLocation;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.send.SendVideo;
+import org.telegram.telegrambots.api.methods.send.SendVoice;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -64,7 +66,10 @@ public class Bot extends TelegramLongPollingBot {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } else {
+            } else if(message_text.toLowerCase().startsWith("give video")){
+                SendVideoMessage(reply, chat_id);
+            }
+            else {
                 SendRegularMessage(reply, chat_id);
             }
 
@@ -90,17 +95,16 @@ public class Bot extends TelegramLongPollingBot {
      * @param cid chat id
      */
     public void SendRegularMessage(String usermsg, Long cid){
-        SendMessage message = new SendMessage() // Create a message object object
-                .setChatId(cid)
-                .setText(usermsg);
+        Say(usermsg, cid);
+    }
 
-
-        try {
-            if(message != null)
-                execute(message); // Sending our message object to user
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+    /**
+     * sends a video message on receiving update
+     * @param usermsg
+     * @param cid
+     */
+    public void SendVideoMessage(String usermsg, Long cid){
+        SendVideo s = new SendVideo().setChatId(cid).setVideo("https://www.youtube.com/watch?v=BnTW6fZz-1E");
     }
 
 
@@ -111,34 +115,42 @@ public class Bot extends TelegramLongPollingBot {
      */
     public void SendLocationMessage(String usermsg, Long cid) throws InterruptedException, ApiException, IOException {
 
-        GeoApiContext context = new GeoApiContext.Builder() //TODO change to singleton
-                .apiKey(Settings.GOOGLE_MAPS_API_TOKEN)
-                .build();
+        //TODO change to singleton
+        GeoApiContext context = new GeoApiContext.Builder() //creates a geoapicontext needed for using google maps api
+                .apiKey(Settings.GOOGLE_MAPS_API_TOKEN) //sets the key to token
+                .build(); //builds context
 
-        GeocodingResult[] results = GeocodingApi.geocode(
-                context,
-                usermsg).await();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        if(results.length == 0){
+        GeocodingResult[] results = GeocodingApi.geocode( //create an array of geocoding results
+                context, //param conext
+                usermsg) //param message
+                .await(); //wait till all results are collected
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create(); //not needed but why not
+        if(results.length == 0){ //null check if the message is empty
             Say("https://en.wikipedia.org/wiki/Nothing", cid);
             return;
         }
+
         if(Settings.DEBUG_MODE)
             System.out.println(gson.toJson(results[0].addressComponents));
 
-        SendLocation message = new SendLocation() // Create a message object object
-                .setChatId(cid)
-                .setLatitude((float) results[0].geometry.location.lat)
-                .setLongitude((float)results[0].geometry.location.lng);
+        Say("I have found " + results.length + "results, here they are", cid);
 
-        try {
-            if(message != null)
-                execute(message); // Sending our message object to user
+        for(int i = 0; i < results.length; i++) {
+            SendLocation message = new SendLocation() // Create a locations message object
+                    .setChatId(cid) //set chat id
+                    .setLatitude((float) results[0].geometry.location.lat) //set latitude
+                    .setLongitude((float) results[0].geometry.location.lng); //set longitude
 
-            if(Settings.DEBUG_MODE)
-                execute(new SendMessage().setChatId(cid).setText("ur msg was " + usermsg));
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
+            try {
+                if (message != null)
+                    execute(message); // Sending our message object to user
+
+                //if (Settings.DEBUG_MODE)
+                    //execute(new SendMessage().setChatId(cid).setText("ur msg was " + usermsg));
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
         }
     }
 
