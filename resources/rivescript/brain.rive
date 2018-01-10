@@ -1,9 +1,18 @@
 // brain.rive
 
-+ [*] (hello|hi|hallo|hey|hoi|he|hei|sup|ey|yo|yoo|eyy|boi) [*]
++ [*] (hello|hi|hallo|hey|hoi|he|hei|sup|ey|yo|yoo|eyy) [*]
 - Hi there!
 - Hello!
 - What's up? :eyes:
+
++ [*] (boi) [*]
+- das me
+
++ [*] bijdehand [*]
+- lol
+
++ [*] (thx|ty|thank you|thanks|thanks you|thank|) [*]
+- ur welcome
 
 + [*] how are you [*]
 - I'm fine.
