@@ -8,10 +8,7 @@ package chatbot;
 import Util.Settings;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.maps.GaeRequestHandler;
-import com.google.maps.GeoApiContext;
-import com.google.maps.GeocodingApi;
-import com.google.maps.GeocodingApiRequest;
+import com.google.maps.*;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
@@ -30,10 +27,13 @@ import java.io.IOException;
  * @author Lars Schipper
  */
 public class Bot extends TelegramLongPollingBot {
+    public String location_asking_string = "where is";
+
     RiveScript bot = new RiveScript();
 
     public Bot() {
         super();
+        ContextSingleton c = new ContextSingleton();
         //bot.setSubroutine("system", new SystemSubroutine());
         //bot.setSubroutine("jdbc", new JdbcSubroutine());
         bot.setSubroutine("send", new SendSubroutine(this));
@@ -54,7 +54,7 @@ public class Bot extends TelegramLongPollingBot {
             // Get reply
             String reply = bot.reply(String.valueOf(chat_id), message_text);
 
-            //if(reply.startsWith("where is")){ //cheap solution for now :)
+            if(message_text.toLowerCase().startsWith(location_asking_string)){ //cheap solution for now :)
                 try {
                     SendLocationMessage(reply, chat_id);
                 } catch (InterruptedException e) {
@@ -64,10 +64,24 @@ public class Bot extends TelegramLongPollingBot {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            //}
+            } else {
+                SendRegularMessage(reply, chat_id);
+            }
 
 
         }
+    }
+
+    public void Say(String msg, Long cid){
+        SendMessage message = new SendMessage() // Create a message object object
+            .setChatId(cid)
+            .setText(msg);
+        if(message != null)
+            try {
+                execute(message); // Sending our message object to user
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
     }
 
     /**
@@ -97,25 +111,32 @@ public class Bot extends TelegramLongPollingBot {
      */
     public void SendLocationMessage(String usermsg, Long cid) throws InterruptedException, ApiException, IOException {
 
-        GeoApiContext context = new GeoApiContext.Builder()
+        GeoApiContext context = new GeoApiContext.Builder() //TODO change to singleton
                 .apiKey(Settings.GOOGLE_MAPS_API_TOKEN)
                 .build();
 
-        GeocodingResult[] results = GeocodingApi.geocode(context,
-                "1600 Amphitheatre Parkway Mountain View, CA 94043").await();
+        GeocodingResult[] results = GeocodingApi.geocode(
+                context,
+                usermsg).await();
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println(gson.toJson(results[0].addressComponents));
+        if(results.length == 0){
+            Say("https://en.wikipedia.org/wiki/Nothing", cid);
+            return;
+        }
+        if(Settings.DEBUG_MODE)
+            System.out.println(gson.toJson(results[0].addressComponents));
 
-        //SendLocation message = new SendLocation() // Create a message object object
-        //         .setChatId(cid).setLongitude(GeocodingResult[]).setLatitude
-
-        SendMessage message = new SendMessage() // Create a message object object
+        SendLocation message = new SendLocation() // Create a message object object
                 .setChatId(cid)
-                .setText(gson.toJson(results[0].addressComponents));
+                .setLatitude((float) results[0].geometry.location.lat)
+                .setLongitude((float)results[0].geometry.location.lng);
 
         try {
             if(message != null)
                 execute(message); // Sending our message object to user
+
+            if(Settings.DEBUG_MODE)
+                execute(new SendMessage().setChatId(cid).setText("ur msg was " + usermsg));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
