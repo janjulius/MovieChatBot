@@ -5,9 +5,18 @@
  */
 package chatbot;
 
+import Util.Settings;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.maps.GaeRequestHandler;
+import com.google.maps.GeoApiContext;
+import com.google.maps.GeocodingApi;
+import com.google.maps.GeocodingApiRequest;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.GeocodingResult;
+import com.google.maps.model.LatLng;
 import com.rivescript.RiveScript;
-import geocoder.Geocoder;
-import gmapAPI.GLatLng;
+import org.telegram.telegrambots.api.methods.GetMe;
 import org.telegram.telegrambots.api.methods.send.SendLocation;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
@@ -45,42 +54,83 @@ public class Bot extends TelegramLongPollingBot {
             // Get reply
             String reply = bot.reply(String.valueOf(chat_id), message_text);
 
-            SendMessage message = new SendMessage() // Create a message object object
-                   .setChatId(chat_id)
-                   .setText(reply);
-
-            //Geocoder g = new Geocoder();
-            //gmapAPI.GLatLng geoloc = new GLatLng(1, 1);
-//
-            //SendLocation message = null;
-
-            //try {
-            //    geoloc = g.geocode(reply);
-            //    message = new SendLocation().setChatId(chat_id).setLatitude((float)geoloc.getLat()).setLongitude((float)geoloc.getLng());
-//
-            //} catch (IOException e) {
-            //    e.printStackTrace();
+            //if(reply.startsWith("where is")){ //cheap solution for now :)
+                try {
+                    SendLocationMessage(reply, chat_id);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ApiException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             //}
 
-            try {
+
+        }
+    }
+
+    /**
+     * sends a regular message on receiving an update
+     * @param usermsg message sent by the user depends on brian.rive
+     * @param cid chat id
+     */
+    public void SendRegularMessage(String usermsg, Long cid){
+        SendMessage message = new SendMessage() // Create a message object object
+                .setChatId(cid)
+                .setText(usermsg);
+
+
+        try {
+            if(message != null)
                 execute(message); // Sending our message object to user
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * send a location message to the user
+     * @param usermsg message sent by the user depends on brain.rive
+     * @param cid chat id
+     */
+    public void SendLocationMessage(String usermsg, Long cid) throws InterruptedException, ApiException, IOException {
+
+        GeoApiContext context = new GeoApiContext.Builder()
+                .apiKey(Settings.GOOGLE_MAPS_API_TOKEN)
+                .build();
+
+        GeocodingResult[] results = GeocodingApi.geocode(context,
+                "1600 Amphitheatre Parkway Mountain View, CA 94043").await();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(results[0].addressComponents));
+
+        //SendLocation message = new SendLocation() // Create a message object object
+        //         .setChatId(cid).setLongitude(GeocodingResult[]).setLatitude
+
+        SendMessage message = new SendMessage() // Create a message object object
+                .setChatId(cid)
+                .setText(gson.toJson(results[0].addressComponents));
+
+        try {
+            if(message != null)
+                execute(message); // Sending our message object to user
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public String getBotUsername() {
         // Return bot username
-        return "MovieBotBot";
+        return Settings.BOT_NAME;
     }
 
     @Override
     public String getBotToken() {
         // Return bot token from BotFather
-        return "481581828:AAECIA6oZ9_nRRHe-DGdD9aunOZCjZtZBac";
-        //return "491218459:AAG-vwJjXLUniO3g6QQCiU2xXO3C9Y3Oj5I"; //coolestboybot
+        return Settings.BOT_TOKEN;
     }
 
 }
