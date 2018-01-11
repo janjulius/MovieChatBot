@@ -10,7 +10,9 @@ public class Settings {
     /**
      * @description Token for the bot token from BotFather
      */
-    public static String BOT_TOKEN = "481581828:AAECIA6oZ9_nRRHe-DGdD9aunOZCjZtZBac"; //"491218459:AAG-vwJjXLUniO3g6QQCiU2xXO3C9Y3Oj5I"; //coolestboybot
+    public static String BOT_TOKEN =
+            "491218459:AAG-vwJjXLUniO3g6QQCiU2xXO3C9Y3Oj5I"; //coolestboybot
+            //"481581828:AAECIA6oZ9_nRRHe-DGdD9aunOZCjZtZBac"; //boi
 
     /**
      * @description Google maps api token

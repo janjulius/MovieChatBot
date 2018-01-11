@@ -6,24 +6,30 @@
 package chatbot;
 
 import Util.Settings;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.*;
 import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
+import com.google.api.services.youtube.*;
+
 import com.rivescript.RiveScript;
+
 import mariadb.Mariadb;
+
 import org.telegram.telegrambots.api.methods.GetMe;
-import org.telegram.telegrambots.api.methods.send.SendLocation;
-import org.telegram.telegrambots.api.methods.send.SendMessage;
-import org.telegram.telegrambots.api.methods.send.SendVideo;
-import org.telegram.telegrambots.api.methods.send.SendVoice;
+import org.telegram.telegrambots.api.methods.send.*;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
+import youtube.Search;
+
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 /**
  *
@@ -43,10 +49,12 @@ public class Bot extends TelegramLongPollingBot {
         bot.loadDirectory("resources/rivescript");
         bot.sortReplies();
 
-        Mariadb j = new Mariadb();
-        String s = j.call(bot, new String[] {Settings.DB_HOST, Settings.DB_PORT, Settings.DB, Settings.USER_NAME, Settings.PASSWORD,
-        "SELECT Name FROM TestPersonTable"});
-        System.out.println(s);
+        if(Settings.DEBUG_MODE) {
+            Mariadb j = new Mariadb();
+            String s = j.call(bot, new String[]{Settings.DB_HOST, Settings.DB_PORT, Settings.DB, Settings.USER_NAME, Settings.PASSWORD,
+                    "SELECT Name FROM TestPersonTable"});
+            System.out.println(s);
+        }
     }
 
     @Override
@@ -84,6 +92,9 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public void Say(String msg, Long cid){
+        if(Settings.DEBUG_MODE)
+            System.out.println("Replied to chat: " + cid + " With message: " + msg);
+
         SendMessage message = new SendMessage() // Create a message object object
             .setChatId(cid)
             .setText(msg);
@@ -93,6 +104,16 @@ public class Bot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
+    }
+
+    public void SendPhotoMessage(String usermsg, Long cid){
+
+
+
+        SendPhoto message = new SendPhoto()
+                .setChatId(cid)
+                //.setNewPhoto()
+                ;
     }
 
     /**
@@ -110,9 +131,9 @@ public class Bot extends TelegramLongPollingBot {
      * @param cid
      */
     public void SendVideoMessage(String usermsg, Long cid){
-        SendVideo s = new SendVideo().setChatId(cid).setVideo("https://www.youtube.com/watch?v=BnTW6fZz-1E");
+        youtube.Search yts = new youtube.Search();
+        Say(yts.Search(usermsg), cid);
     }
-
 
     /**
      * send a location message to the user
