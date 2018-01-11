@@ -11,5 +11,6 @@
     <orderEntry type="library" name="joda-time-2.9.9" level="project" />
     <orderEntry type="library" name="com.google.maps:google-maps-services:0.2.6" level="project" />
     <orderEntry type="library" name="google-maps-services-0.2.6" level="project" />
+    <orderEntry type="library" name="mariadb-java-client-2.2.1" level="project" />
   </component>
 </module>

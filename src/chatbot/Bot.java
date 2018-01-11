@@ -13,6 +13,7 @@ import com.google.maps.errors.ApiException;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.rivescript.RiveScript;
+import mariadb.Mariadb;
 import org.telegram.telegrambots.api.methods.GetMe;
 import org.telegram.telegrambots.api.methods.send.SendLocation;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -41,6 +42,11 @@ public class Bot extends TelegramLongPollingBot {
         bot.setSubroutine("send", new SendSubroutine(this));
         bot.loadDirectory("resources/rivescript");
         bot.sortReplies();
+
+        Mariadb j = new Mariadb();
+        String s = j.call(bot, new String[] {Settings.DB_HOST, Settings.DB_PORT, Settings.DB, Settings.USER_NAME, Settings.PASSWORD,
+        "SELECT Name FROM TestPersonTable"});
+        System.out.println(s);
     }
 
     @Override

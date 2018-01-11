@@ -26,4 +26,29 @@ public class Settings {
      * @description returns extra debug messages if turned on
      */
     public static boolean DEBUG_MODE = true;
+
+    /**
+     * @description username to login to the host
+     */
+    public static String USER_NAME = "lars_bigmovie";
+
+    /**
+     * @description password to login to the host
+     */
+    public static String PASSWORD = "g5ZaaJv7";
+
+    /**
+     * @description port for connection to the database
+     */
+    public static String DB_PORT = "3306";
+
+    /**
+     * @description database host
+     */
+    public static String DB_HOST = "server01.cloudzeker.nl";
+
+    /**
+     * @description repository name
+     */
+    public static String DB = "lars_bigmovie";
 }
