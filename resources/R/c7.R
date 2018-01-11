@@ -9,15 +9,36 @@ library(ggplot2)
 
 con <- dbConnect(MySQL(), dbname="lars_bigmovie", user="lars_bigmovie", password="g5ZaaJv7", host="www.cloudzeker.nl")
 
-franceCount <- dbGetQuery(con, "select count(*) as count 
-                          from genres, countries 
-                          where genres.genre = 'war' or 'action' or 'horror' or 'crime' 
-                          AND countries.country = 'France'")
+#total movie count in france
+franceTotalCount <- dbGetQuery(con, "select count(ID) as count
+                               from countries
+                               where country = 'France'")
 
-usCount <- dbGetQuery(con, "select count(*) as count 
-                      from genres, countries 
-                      where genres.genre = 'war' or 'action' or 'horror' or 'crime' 
-                      AND countries.country = 'US'")
+#violant movies in france
+franceViolanceCount <- dbGetQuery(con, "select count(ID) as count 
+                          from genres 
+                          WHERE genre = 'war' or 'action' or 'horror' or 'crime'
+                          AND ID = (
+                            select ID
+                            from countries
+                            where country = 'France')")
+
+#total movies in usa
+usaTotalCount <- dbGetQuery(con, "select count(ID) as count
+                          from countries
+                          where country = 'USA'")
+
+#voilant movies in usa
+usaViolanceCount <- dbGetQuery(con, "select count(ID) as count 
+                          from genres 
+                          WHERE genre = 'war' or 'action' or 'horror' or 'crime'
+                          AND ID = (
+                            select ID
+                            from countries
+                            where country = 'France')")
+
+usaPercentage = usaViolanceCount / usaTotalCount
+francePercentage = franceViolanceCount / franceTotalCount
 
 invisible(jpeg('/tmp/video-format.jpg'))
 ggplot(mapping=aes(x=dat))+
