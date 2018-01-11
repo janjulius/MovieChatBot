@@ -5,6 +5,12 @@
 - Hello!
 - What's up? :eyes:
 
++ my name is *
+- <set name=<star>> I will remember that your name is  <get name>.
+
++ what is my name[*]
+- Your name is <get name> how can you forget that!
+
 + [*] (boi) [*]
 - das me
 
@@ -17,8 +23,8 @@
 + [*] do (you|yu) (know|kno|knoe) (the|de) (way|wea|wae) [*]
 - i do not kno de wae you need to hav ebola to kno de wae i do not have ebola
 
-+ [*] best country in the world? [*]
-- Uganda #1
++ [*] best country [*]
+- Uganda
 
 + [*] (thx|ty|thank you|thanks|thanks you|thank|) [*]
 - ur welcome
@@ -33,6 +39,9 @@
 - I'm MovieBot bot! Ask me questions about your favorite movies. Type help for some example questions.
 
 + where is *
+- <star>
+
++ give video *
 - <star>
 
 + [*] help [*]
