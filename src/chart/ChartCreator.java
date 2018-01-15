@@ -1,5 +1,6 @@
 package chart;
 
+import Util.Settings;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
@@ -23,18 +24,28 @@ public class ChartCreator {
 
     public void getChartImage(String chartName, List<LineDataType> typeList){
         try {
-
+            int width = 800, height = 800;
             if(chartName == null)
-                chartName = "a chart";
+                chartName = "out\\";
 
             dataset = createDataset(typeList);
 
             OutputStream out = new FileOutputStream(chartName);
 
+            chart = ChartFactory.createLineChart(
+                    chartName,
+                    "CategoryLabel",
+                    "ValueLabel",
+                    dataset);
+
+            if(Settings.DEBUG_MODE){
+                System.out.println("Attempting to create line diagram");
+            }
+
             ChartUtilities.writeChartAsPNG(out,
                     chart,
-                    panel.getWidth(),
-                    panel.getHeight());
+                    width,
+                    height);
 
         } catch (IOException ex) {
             ex.printStackTrace();
