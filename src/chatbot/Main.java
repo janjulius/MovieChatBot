@@ -5,6 +5,7 @@
  */
 package chatbot;
 
+import Util.Settings;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -31,7 +32,7 @@ public class Main {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-        System.out.println("bot successfully started.");
+        System.out.println(Settings.BOT_NAME + " successfully started.");
     }
 
 }

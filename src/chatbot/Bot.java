@@ -21,8 +21,10 @@ import com.rivescript.RiveScript;
 
 import mariadb.Mariadb;
 
+import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.GetMe;
 import org.telegram.telegrambots.api.methods.send.*;
+import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
@@ -116,22 +118,38 @@ public class Bot extends TelegramLongPollingBot {
 
     public void SendPhotoMessage(String usermsg, Long cid){
 
-        List<LineDataType> ListTest = new ArrayList<LineDataType>();
-
-
-        ListTest.add(new LineDataType(2, "TestRow", "TestColumn"));
-        ListTest.add(new LineDataType(5, "TestRow", "TestColumn"));
-        ListTest.add(new LineDataType(10, "TestRow", "TestColumn"));
-        ListTest.add(new LineDataType(34, "TestRow", "TestColumn"));
-        ListTest.add(new LineDataType(1, "TestRow", "TestColumn"));
-
         ChartCreator c = new ChartCreator();
-        c.getChartImage("Results", ListTest);
+        c.SetHorizontalLabel("H");
+        c.SetVerticleLabel("V");
+        c.AddToDataSet(new LineDataType(0.1, "TestRow", "TestColumn"), c.getDataset());
+        c.AddToDataSet(new LineDataType(0.6, "testrow2", "TestColumn"), c.getDataset());
+        c.AddToDataSet(new LineDataType(0.4, "TestRow3", "TestColumn"), c.getDataset());
+        c.AddToDataSet(new LineDataType(0.23, "testrow4", "TestColumn"), c.getDataset());
+        c.AddToDataSet(new LineDataType(0.51, "TestRow5", "TestColumn"), c.getDataset());
+        c.AddToDataSet(new LineDataType(0.14, "testrow6", "TestColumn"), c.getDataset());
+        c.AddToDataSet(new LineDataType(0.95, "TestRow7", "TestColumn"), c.getDataset());
+        c.AddToDataSet(new LineDataType(0.61, "testrow8", "TestColumn"), c.getDataset());
 
-        //SendPhoto message = new SendPhoto()
-        //        .setChatId(cid)
-        //        .setNewPhoto(f)
-        //        ;
+        SendPhoto sendPhotoRequest = new SendPhoto();
+        sendPhotoRequest.setChatId(cid);
+        sendPhotoRequest.setNewPhoto(c.getChartImage("Results"));
+        try {
+            sendPhoto(sendPhotoRequest);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void SendPhotoMessage(String usermsg, Long cid, String url){
+        SendPhoto sendPhotoRequest = new SendPhoto();
+        sendPhotoRequest.setChatId(cid);
+        sendPhotoRequest.setPhoto(url);
+        try {
+            sendPhoto(sendPhotoRequest);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
 
     }
 

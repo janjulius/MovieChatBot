@@ -22,20 +22,23 @@ public class ChartCreator {
     JFreeChart chart;
     ChartPanel panel;
 
-    public void getChartImage(String chartName, List<LineDataType> typeList){
+    int width = 800, height = 800;
+
+    String HorizontalLabel = "HorizontalLabel", VerticalLabel = "VerticleLable";
+
+    public File getChartImage(String chartName){
         try {
-            int width = 800, height = 800;
             if(chartName == null)
                 chartName = "out\\";
 
-            dataset = createDataset(typeList);
+            //dataset = createDataset(typeList);
 
             OutputStream out = new FileOutputStream(chartName);
 
-            chart = ChartFactory.createLineChart(
+            chart = ChartFactory.createBarChart(
                     chartName,
-                    "CategoryLabel",
-                    "ValueLabel",
+                    HorizontalLabel,
+                    VerticalLabel,
                     dataset);
 
             if(Settings.DEBUG_MODE){
@@ -47,9 +50,20 @@ public class ChartCreator {
                     width,
                     height);
 
+            return new File("Results");
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+        return null;
+    }
+
+    public void SetVerticleLabel(String v){
+        VerticalLabel = v;
+    }
+
+    public void SetHorizontalLabel(String v){
+        HorizontalLabel = v;
     }
 
     private DefaultCategoryDataset createDataset(List<LineDataType> l) {
@@ -60,5 +74,13 @@ public class ChartCreator {
                     l.get(i).getColumnKey());
         }
         return d;
+    }
+
+    public void AddToDataSet(LineDataType dataObject, DefaultCategoryDataset dSet){
+        dSet.addValue(dataObject.getValue(), dataObject.getRowKey(), dataObject.getColumnKey());
+    }
+
+    public DefaultCategoryDataset getDataset() {
+        return dataset;
     }
 }
