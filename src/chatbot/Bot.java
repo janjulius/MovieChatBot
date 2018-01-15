@@ -39,6 +39,7 @@ import java.util.Properties;
 /**
  *
  * @author Lars Schipper
+ * @author Jan Julius de Lang
  */
 public class Bot extends TelegramLongPollingBot {
     public String location_asking_string = "where is";

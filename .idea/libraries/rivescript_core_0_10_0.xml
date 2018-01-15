@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="rivescript-core-0.10.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/rivescript-core-0.10.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-api.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/slf4j-nop.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/telegrambots-3.4-jar-with-dependencies.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
