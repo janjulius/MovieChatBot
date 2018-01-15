@@ -7,6 +7,8 @@ package chatbot;
 
 import Util.Settings;
 
+import chart.ChartCreator;
+import chart.LineDataType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.*;
@@ -27,8 +29,11 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 import youtube.Search;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -70,6 +75,8 @@ public class Bot extends TelegramLongPollingBot {
             // Get reply
             String reply = bot.reply(String.valueOf(chat_id), message_text);
 
+            SendPhotoMessage(reply, chat_id);
+
             if(message_text.toLowerCase().startsWith(location_asking_string)){ //cheap solution for now :)
                 try {
                     SendLocationMessage(reply, chat_id);
@@ -108,12 +115,23 @@ public class Bot extends TelegramLongPollingBot {
 
     public void SendPhotoMessage(String usermsg, Long cid){
 
+        List<LineDataType> ListTest = new ArrayList<LineDataType>();
 
 
-        SendPhoto message = new SendPhoto()
-                .setChatId(cid)
-                //.setNewPhoto()
-                ;
+        ListTest.add(new LineDataType(2, "TestRow", "TestColumn"));
+        ListTest.add(new LineDataType(5, "TestRow", "TestColumn"));
+        ListTest.add(new LineDataType(10, "TestRow", "TestColumn"));
+        ListTest.add(new LineDataType(34, "TestRow", "TestColumn"));
+        ListTest.add(new LineDataType(1, "TestRow", "TestColumn"));
+
+        ChartCreator c = new ChartCreator();
+        c.getChartImage("Results", ListTest);
+
+        //SendPhoto message = new SendPhoto()
+        //        .setChatId(cid)
+        //        .setNewPhoto(f)
+        //        ;
+
     }
 
     /**
